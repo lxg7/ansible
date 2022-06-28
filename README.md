@@ -38,10 +38,15 @@ GRUB_CMDLINE_LINUX_DEFAULT=«bootdegraded» (обязательно добавл
 !!! Пока работает только вариант с RAID-1 для двух новых дисков(без текущего).
 
 ## Использование
+
+Ознакомиться с базовым функционалом ansible, поправить файлы hosts и ansible.cfg
+
 ```bash
-git clone https://github.com/lxg7/raid1builder.git
-cd raid1builder
-sudo ./raid1builder.sh
+apt install ansible
+git clone https://github.com/lxg7/ansible.git
+cd ansible
+ansible-playbook buildraid.yml -b
+
 ```
  Далее необходимо следовать инструкциям
  
