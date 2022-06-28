@@ -1,0 +1,40 @@
+---
+
+- hosts: [clients]
+  become: yes
+  become_user: root
+
+
+  tasks:
+  - name: Print disk result
+    debug: msg="/dev/{{item.key}}"
+    when:
+    - not item.value.partitions
+    - not item.value.holders
+    - not item.value.links.ids
+    - item.key | search ("sd")
+    with_dict: "{{ ansible_devices }}"
+
+  - name: Install packeges
+    apt:
+      name:
+      - "mdadm" 
+      - "rsync"
+      state: latest
+
+  - name: Download script from master
+    copy: src=/home/alex/ansible/raid dest=/tmp mode=0777
+
+
+  - name: Executing script
+    shell: sudo /tmp/raid/raid1builder.sh
+
+
+  - name: Download script from master
+    copy: src=/home/alex/ansible/raid/chroot.sh dest=/mnt/ mode=0777
+
+
+  - name: Executing chroot script
+    shell: sudo chroot /mnt/ /chroot.sh /dev/sdb /dev/sdc
+
+
